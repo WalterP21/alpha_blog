@@ -148,3 +148,54 @@ The steps are to -
 2) Have the corresponding controller/action that the route directs the request to
 
 3) Have a corresponding view to display to the user who makes the request
+
+The index action in a controller is used to display a summarized listing of all the items in a table. If there are big blog posts as each item, then the index would usually contain either a summary of the post or a few hundred characters that link to the actual post.
+
+Examples:
+
+- articles listing
+
+- users listing
+
+- friends listing
+
+- stocks listing
+
+- photos listing
+
+- listing of people you are following on IG etc.
+
+To create a new article from the browser (front-end), you'll need a form to get input from the user. Since we're dealing with articles which have title and description, you want to give the user an ability to fill-in the title and description of the article they are trying to create. The form is displayed via the new route/action and the form submission is handled by the create action.
+
+First you'll need to expose these two routes in the config/routes.rb file, so the file looks like below:
+
+Rails.application.routes.draw do   root 'pages#home'   get 'about', to: 'pages#about'   resources :articles, only: [:show, :index, :new, :create] end
+
+You will need to add the new and create actions in the articles_controller.rb file like below:
+```ruby
+def new
+end
+ 
+def create 
+end
+```  
+You will also need to create a view template for the new view. So, in the app/views/articles folder create a new file called new.html.erb and fill it in like below:
+```html
+<h1>Create a new article</h1>
+ 
+<%= form_with scope: :article, url: articles_path, local: true do |f| %>
+  <p> 
+    <%= f.label :title %><br/> 
+    <%= f.text_field :title %>
+  </p>
+  <p>
+    <%= f.label :description %><br/> 
+    <%= f.text_area :description %> 
+  </p>
+  <p>
+    <%= f.submit %> 
+  </p>
+<% end %>
+```
+
+Things to keep in mind: Strong parameters - whitelisting of data (values associated with attributes) that are received through the params hash. During this process for articles you had to 'whitelist' the data coming through for the title and description fields.
