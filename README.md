@@ -131,3 +131,20 @@ article.destroy
 
 Validations enforce constraints on your model so you can have greater control on what you are allowing as data to be saved in your database/tables.
 
+Show actions are usually used to display individual items in a resource. For example:
+
+- a specific article from an articles table
+
+- a specific user's profile from a social media app
+
+- details of a specific stock from a stocks table
+
+- a specific recipe from a list of recipes
+
+The steps are to -
+
+1) Have a route for it
+
+2) Have the corresponding controller/action that the route directs the request to
+
+3) Have a corresponding view to display to the user who makes the request
