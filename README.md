@@ -128,3 +128,6 @@ You can delete an article by using the destroy method. A sample sequence could b
 article = Article.find(id of article you want to delete)
 article.destroy
 ```
+
+Validations enforce constraints on your model so you can have greater control on what you are allowing as data to be saved in your database/tables.
+
