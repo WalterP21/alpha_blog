@@ -199,3 +199,64 @@ You will also need to create a view template for the new view. So, in the app/vi
 ```
 
 Things to keep in mind: Strong parameters - whitelisting of data (values associated with attributes) that are received through the params hash. During this process for articles you had to 'whitelist' the data coming through for the title and description fields.
+
+In order to display the validation messages, we have to add an if else block to our create action. This is done to check for if the save happened, if not (else clause) then we display the new form again with the messages displayed. The create action would look like below:
+```ruby
+def create
+  @article = Article.new(params.require(:article).permit(:title, :description))
+  if @article.save
+    redirect_to @article 
+  else
+    render 'new'
+  end
+end
+```
+In order to display the messages, we add the following code block to the new.html.erb template (above the form code):
+```html
+<% if @article.errors.any? %> 
+  <h2>The following errors prevented the article from being saved</h2> 
+  <ul> 
+    <% @article.errors.full_messages.each do |msg| %> 
+      <li><%= msg %></li> 
+    <% end %> 
+  </ul>
+<% end %>
+```
+To make the code work for the first time when the new form is displayed, we have to initiate an @article instance variable in the new action of the articles controller. Otherwise, the code @article.errors.any? will fail (as there is no @article instance variable available at the time).
+
+Therefore, update the new action like below:
+```ruby
+def new
+  @article = Article.new
+end
+```
+To display messages to the user using the flash messages helper, update the create action with the additional flash line like below:
+```ruby
+def create
+  @article = Article.new(params.require(:article).permit(:title, :description))
+  if @article.save
+    flash[:notice] = "Article was created successfully."
+    redirect_to @article 
+  else
+    render 'new'
+  end
+end
+```
+Once the flash helper has the key of 'notice' which has value of 'Article was created successfully' via the create action, you can use this helper in your views (upon the redirect) to display the message to the user. Therefore we add the following code to the app/views/layouts/application.html.erb file within the body tag:
+```html
+<% flash.each do |name, msg| %> 
+  <%= msg %> 
+<% end %>
+```
+
+The process of editing an existing article and updating the article in the articles table utilizes the edit and update actions. The standard process is as follows:
+
+1. Expose edit and update routes.
+
+2. Add edit and and update actions in the articles controller.
+
+3. Create an edit template (form) in the app/views/articles folder.
+
+4. Use the edit action to find the article to edit, display the existing article details in the edit form.
+
+5. Use the update action to find the article in the db. Whitelist the new title and description fields and if there are no validation errors, then update the article in the articles table with the new data.
