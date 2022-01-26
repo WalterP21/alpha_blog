@@ -260,3 +260,11 @@ The process of editing an existing article and updating the article in the artic
 4. Use the edit action to find the article to edit, display the existing article details in the edit form.
 
 5. Use the update action to find the article in the db. Whitelist the new title and description fields and if there are no validation errors, then update the article in the articles table with the new data.
+
+Deleting articles can be accomplished using the destroy action in the articles controller. The standard deletion process would look like below:
+
+1. Expose the destroy route.
+
+2. Add the destroy action in the articles controller.
+
+3. Find the article to delete and delete it using the destroy method within the destroy action
